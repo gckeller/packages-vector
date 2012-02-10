@@ -82,15 +82,15 @@ module Data.Vector.Generic (
   mapM, mapM_, forM, forM_,
 
   -- ** Zipping
-  zipWith, zipWith3, zipWith4, zipWith5, zipWith6,
+  zipWith, zipWith3, zipWith4, zipWith5, zipWith6, zipWith7,
   izipWith, izipWith3, izipWith4, izipWith5, izipWith6,
-  zip, zip3, zip4, zip5, zip6,
+  zip, zip3, zip4, zip5, zip6, zip7, 
 
   -- ** Monadic zipping
   zipWithM, zipWithM_,
 
   -- ** Unzipping
-  unzip, unzip3, unzip4, unzip5, unzip6,
+  unzip, unzip3, unzip4, unzip5, unzip6, unzip7,
 
   -- * Working with predicates
 
@@ -1086,6 +1086,20 @@ zipWith6 f as bs cs ds es fs
                                 (stream es)
                                 (stream fs))
 
+zipWith7 :: (Vector v a, Vector v b, Vector v c, Vector v d, Vector v e,
+             Vector v f, Vector v g, Vector v h)
+         => (a -> b -> c -> d -> e -> f -> g -> h)
+         -> v a -> v b -> v c -> v d -> v e -> v f -> v g -> v h
+{-# INLINE zipWith7 #-}
+zipWith7 f as bs cs ds es fs gs
+  = unstream (Stream.zipWith7 f (stream as)
+                                (stream bs)
+                                (stream cs)
+                                (stream ds)
+                                (stream es)
+                                (stream fs)
+                                (stream gs))
+
 -- | /O(min(m,n))/ Zip two vectors with a function that also takes the
 -- elements' indices.
 izipWith :: (Vector v a, Vector v b, Vector v c)
@@ -1164,6 +1178,12 @@ zip6 :: (Vector v a, Vector v b, Vector v c, Vector v d, Vector v e,
 {-# INLINE zip6 #-}
 zip6 = zipWith6 (,,,,,)
 
+zip7 :: (Vector v a, Vector v b, Vector v c, Vector v d, Vector v e,
+         Vector v f, Vector v g, Vector v (a, b, c, d, e, f, g))
+     => v a -> v b -> v c -> v d -> v e -> v f -> v g -> v (a, b, c, d, e, f, g)
+{-# INLINE zip7 #-}
+zip7 = zipWith7 (,,,,,,)
+
 -- Monadic zipping
 -- ---------------
 
@@ -1226,6 +1246,19 @@ unzip6 xs = (map (\(a, b, c, d, e, f) -> a) xs,
              map (\(a, b, c, d, e, f) -> d) xs,
              map (\(a, b, c, d, e, f) -> e) xs,
              map (\(a, b, c, d, e, f) -> f) xs)
+
+unzip7 :: (Vector v a, Vector v b, Vector v c, Vector v d, Vector v e,
+           Vector v f, Vector v g, Vector v (a, b, c, d, e, f, g))
+       => v (a, b, c, d, e, f, g) -> (v a, v b, v c, v d, v e, v f, v g)
+{-# INLINE unzip7 #-}
+unzip7 xs = (map (\(a, b, c, d, e, f, g) -> a) xs,
+             map (\(a, b, c, d, e, f, g) -> b) xs,
+             map (\(a, b, c, d, e, f, g) -> c) xs,
+             map (\(a, b, c, d, e, f, g) -> d) xs,
+             map (\(a, b, c, d, e, f, g) -> e) xs,
+             map (\(a, b, c, d, e, f, g) -> f) xs,
+             map (\(a, b, c, d, e, f, g) -> g) xs)
+
 
 -- Filtering
 -- ---------

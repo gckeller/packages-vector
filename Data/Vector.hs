@@ -92,15 +92,15 @@ module Data.Vector (
   mapM, mapM_, forM, forM_,
 
   -- ** Zipping
-  zipWith, zipWith3, zipWith4, zipWith5, zipWith6,
+  zipWith, zipWith3, zipWith4, zipWith5, zipWith6, zipWith7,
   izipWith, izipWith3, izipWith4, izipWith5, izipWith6,
-  zip, zip3, zip4, zip5, zip6,
+  zip, zip3, zip4, zip5, zip6, zip7, 
 
   -- ** Monadic zipping
   zipWithM, zipWithM_,
 
   -- ** Unzipping
-  unzip, unzip3, unzip4, unzip5, unzip6,
+  unzip, unzip3, unzip4, unzip5, unzip6, unzip7,
 
   -- * Working with predicates
 
@@ -916,6 +916,12 @@ zipWith6 :: (a -> b -> c -> d -> e -> f -> g)
 {-# INLINE zipWith6 #-}
 zipWith6 = G.zipWith6
 
+zipWith7 :: (a -> b -> c -> d -> e -> f -> g -> h)
+         -> Vector a -> Vector b -> Vector c -> Vector d -> Vector e
+         -> Vector f -> Vector g -> Vector h
+{-# INLINE zipWith7 #-}
+zipWith7 = G.zipWith7
+
 -- | /O(min(m,n))/ Zip two vectors with a function that also takes the
 -- elements' indices.
 izipWith :: (Int -> a -> b -> c) -> Vector a -> Vector b -> Vector c
@@ -970,6 +976,11 @@ zip6 :: Vector a -> Vector b -> Vector c -> Vector d -> Vector e -> Vector f
 {-# INLINE zip6 #-}
 zip6 = G.zip6
 
+zip7 :: Vector a -> Vector b -> Vector c -> Vector d -> Vector e -> Vector f -> Vector g
+     -> Vector (a, b, c, d, e, f, g)
+{-# INLINE zip7 #-}
+zip7 = G.zip7
+
 -- Unzipping
 -- ---------
 
@@ -995,6 +1006,12 @@ unzip6 :: Vector (a, b, c, d, e, f)
        -> (Vector a, Vector b, Vector c, Vector d, Vector e, Vector f)
 {-# INLINE unzip6 #-}
 unzip6 = G.unzip6
+
+unzip7 :: Vector (a, b, c, d, e, f, g)
+       -> (Vector a, Vector b, Vector c, Vector d, Vector e, Vector f, Vector g)
+{-# INLINE unzip7 #-}
+unzip7 = G.unzip7
+
 
 -- Monadic zipping
 -- ---------------

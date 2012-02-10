@@ -35,9 +35,9 @@ module Data.Vector.Fusion.Stream.Monadic (
   
   -- * Zipping
   indexed, indexedR, zipWithM_,
-  zipWithM, zipWith3M, zipWith4M, zipWith5M, zipWith6M,
-  zipWith, zipWith3, zipWith4, zipWith5, zipWith6,
-  zip, zip3, zip4, zip5, zip6,
+  zipWithM, zipWith3M, zipWith4M, zipWith5M, zipWith6M, zipWith7M,
+  zipWith, zipWith3, zipWith4, zipWith5, zipWith6, zipWith7, 
+  zip, zip3, zip4, zip5, zip6, zip7,
 
   -- * Filtering
   filter, filterM, takeWhile, takeWhileM, dropWhile, dropWhileM,
@@ -559,6 +559,14 @@ zipWith6M fn sa sb sc sd se sf
   = zipWithM (\(a,b,c) (d,e,f) -> fn a b c d e f) (zip3 sa sb sc)
                                                   (zip3 sd se sf)
 
+zipWith7M :: Monad m => (a -> b -> c -> d -> e -> f -> g -> m h)
+                     -> Stream m a -> Stream m b -> Stream m c -> Stream m d
+                     -> Stream m e -> Stream m f -> Stream m g -> Stream m h
+{-# INLINE zipWith7M #-}
+zipWith7M fn sa sb sc sd se sf sg
+  = zipWithM (\(a,b,c) (d,e,(f, g)) -> fn a b c d e f g) (zip3 sa sb sc)
+                                                  (zip3 sd se (zip sf sg))
+
 zipWith :: Monad m => (a -> b -> c) -> Stream m a -> Stream m b -> Stream m c
 {-# INLINE zipWith #-}
 zipWith f = zipWithM (\a b -> return (f a b))
@@ -586,6 +594,12 @@ zipWith6 :: Monad m => (a -> b -> c -> d -> e -> f -> g)
 {-# INLINE zipWith6 #-}
 zipWith6 fn = zipWith6M (\a b c d e f -> return (fn a b c d e f))
 
+zipWith7 :: Monad m => (a -> b -> c -> d -> e -> f -> g -> h)
+                    -> Stream m a -> Stream m b -> Stream m c -> Stream m d
+                    -> Stream m e -> Stream m f -> Stream m g -> Stream m h
+{-# INLINE zipWith7 #-}
+zipWith7 fn = zipWith7M (\a b c d e f g -> return (fn a b c d e f g))
+
 zip :: Monad m => Stream m a -> Stream m b -> Stream m (a,b)
 {-# INLINE zip #-}
 zip = zipWith (,)
@@ -608,6 +622,11 @@ zip6 :: Monad m => Stream m a -> Stream m b -> Stream m c -> Stream m d
                 -> Stream m e -> Stream m f -> Stream m (a,b,c,d,e,f)
 {-# INLINE zip6 #-}
 zip6 = zipWith6 (,,,,,)
+
+zip7 :: Monad m => Stream m a -> Stream m b -> Stream m c -> Stream m d
+                -> Stream m e -> Stream m f -> Stream m g -> Stream m (a,b,c,d,e,f,g)
+{-# INLINE zip7 #-}
+zip7 = zipWith7 (,,,,,,)
 
 -- Filtering
 -- ---------

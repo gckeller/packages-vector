@@ -39,7 +39,7 @@ module Data.Vector.Fusion.Stream (
   
   -- * Zipping
   indexed, indexedR,
-  zipWith, zipWith3, zipWith4, zipWith5, zipWith6,
+  zipWith, zipWith3, zipWith4, zipWith5, zipWith6, zipWith7,
   zip, zip3, zip4, zip5, zip6,
 
   -- * Filtering
@@ -299,6 +299,12 @@ zipWith6 :: (a -> b -> c -> d -> e -> f -> g)
                     -> Stream e -> Stream f -> Stream g
 {-# INLINE zipWith6 #-}
 zipWith6 = M.zipWith6
+
+zipWith7 :: (a -> b -> c -> d -> e -> f -> g -> h)
+                    -> Stream a -> Stream b -> Stream c -> Stream d
+                    -> Stream e -> Stream f -> Stream g -> Stream h
+{-# INLINE zipWith7 #-}
+zipWith7 = M.zipWith7
 
 zip :: Stream a -> Stream b -> Stream (a,b)
 {-# INLINE zip #-}
